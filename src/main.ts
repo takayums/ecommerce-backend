@@ -1,10 +1,18 @@
-import "dotenv/config";
-
+/*
+ * Custom Modules
+ */
 import { app } from "@/application/app.ts";
 import { logger } from "@/application/logging.ts";
+import config from "./lib/config.ts";
 
-const port = process.env.PORT;
+const port = config.PORT;
 
-app.listen(port, () => {
-  logger.info(`Server success running on port http://localhost:${port}`);
-});
+(async () => {
+  try {
+    app.listen(port, () => {
+      logger.info(`Server success running on port http://localhost:${port}`);
+    });
+  } catch (error) {
+    logger.error("Filed to start server", error);
+  }
+})();

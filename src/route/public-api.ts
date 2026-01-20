@@ -1,5 +1,11 @@
+/*
+ * Node Modules
+ */
 import express from "express";
 
+/*
+ * Custom Modules
+ */
 import { UserController } from "@/controller/user-controller.ts";
 
 export const publicRouter = express.Router();

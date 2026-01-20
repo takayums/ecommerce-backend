@@ -1,6 +1,12 @@
+/*
+ * Node Modules
+ */
 import { Response, Request, NextFunction } from "express";
 import { ZodError } from "zod";
 
+/*
+ * Custom Modules
+ */
 import { ResponseError } from "@/error/response-error.ts";
 
 export const errorMiddleware = async (

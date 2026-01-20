@@ -1,26 +1,32 @@
+/*
+ * Node Modules
+ */
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+/*
+ * Custom Modules
+ */
 import { prismaClient } from "@/application/database.ts";
+import { User } from "@prisma/generated/prisma/client.ts";
 import { logger } from "@/application/logging.ts";
+import { ResponseError } from "@/error/response-error.ts";
+import { Validation } from "@/validation/validation.ts";
 
+/*
+ * Types
+ */
 import {
   CreateUserRequest,
   LoginRequest,
   responseUser,
   UpdateUserRequest,
 } from "@/model/user-model.ts";
-
-import { ResponseError } from "@/error/response-error.ts";
-import { Validation } from "@/validation/validation.ts";
 import {
   TypeLoginUserRequest,
   TypeRegisterUserRequest,
   UserValidation,
-  TypeUpdateUserRequest,
 } from "@/validation/user-validation.ts";
-
-import { User } from "@prisma/generated/prisma/client.ts";
 
 export class UserService {
   // Register Service

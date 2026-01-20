@@ -1,13 +1,22 @@
+/*
+ * Node Modules
+ */
 import { Response, Request, NextFunction } from "express";
 
+/*
+ * Custom Modules
+ */
+import { UserService } from "@/service/user-service.ts";
+
+/*
+ * Types
+ */
 import {
   CreateUserRequest,
   LoginRequest,
   UpdateUserRequest,
 } from "@/model/user-model.ts";
 import { UserRequest } from "@/type/user-request.ts";
-
-import { UserService } from "@/service/user-service.ts";
 
 export class UserController {
   static async Register(req: Request, res: Response, next: NextFunction) {

@@ -1,5 +1,16 @@
+/*
+ * Node Modules
+ */
 import { NextFunction, Response } from "express";
+
+/*
+ * Custom Modules
+ */
 import { prismaClient } from "@/application/database.ts";
+
+/*
+ * Types
+ */
 import { UserRequest } from "@/type/user-request.ts";
 
 export const authMiddleware = async (
