@@ -1,11 +1,11 @@
 import { NextFunction, Response } from "express";
-import { prismaClient } from "@/application/database";
-import { UserRequest } from "@/type/user-request";
+import { prismaClient } from "@/application/database.ts";
+import { UserRequest } from "@/type/user-request.ts";
 
 export const authMiddleware = async (
   req: UserRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const token = req.cookies.token;
   if (token) {

@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "@prisma/generated/prisma/client.ts";
 
 export type UserResponse = {
   name: string;

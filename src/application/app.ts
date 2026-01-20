@@ -1,9 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 
-import { errorMiddleware } from "@/middleware/error-middleware";
-import { publicRouter } from "@/route/public-api";
-import { apiRouter } from "@/route/api";
+import { errorMiddleware } from "@/middleware/error-middleware.ts";
+import { publicRouter } from "@/route/public-api.ts";
+import { apiRouter } from "@/route/api.ts";
 
 export const app = express();
 

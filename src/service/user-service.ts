@@ -1,32 +1,33 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { prismaClient } from "@/application/database";
-import { logger } from "@/application/logging";
+import { prismaClient } from "@/application/database.ts";
+import { logger } from "@/application/logging.ts";
 
 import {
   CreateUserRequest,
   LoginRequest,
   responseUser,
   UpdateUserRequest,
-} from "@/model/user-model";
+} from "@/model/user-model.ts";
 
-import { ResponseError } from "@/error/response-error";
-import { Validation } from "@/validation/validation";
+import { ResponseError } from "@/error/response-error.ts";
+import { Validation } from "@/validation/validation.ts";
 import {
   TypeLoginUserRequest,
   TypeRegisterUserRequest,
   UserValidation,
   TypeUpdateUserRequest,
-} from "@/validation/user-validation";
-import { User } from "@prisma/client";
+} from "@/validation/user-validation.ts";
+
+import { User } from "@prisma/generated/prisma/client.ts";
 
 export class UserService {
   // Register Service
   static async RegisterService(request: CreateUserRequest) {
     const registerRequest: TypeRegisterUserRequest = Validation.validate(
       UserValidation.REGISTER,
-      request
+      request,
     );
     const existingUser = await prismaClient.user.count({
       where: {
@@ -36,7 +37,7 @@ export class UserService {
 
     if (existingUser == 1) {
       logger.warn(
-        `Registration failed: Email already is use - ${request.email}`
+        `Registration failed: Email already is use - ${request.email}`,
       );
       throw new ResponseError("User is already", 401);
     }
@@ -55,7 +56,7 @@ export class UserService {
   static async LoginService(request: LoginRequest) {
     const loginRequest: TypeLoginUserRequest = Validation.validate(
       UserValidation.LOGIN,
-      request
+      request,
     );
     const jwtSecretKey: string = process.env.SECRETE_KEY as string;
     let user = await prismaClient.user.findUnique({
@@ -70,7 +71,7 @@ export class UserService {
 
     const passwordMatched = await bcrypt.compare(
       loginRequest.password,
-      user!.password
+      user!.password,
     );
 
     if (!passwordMatched) {
@@ -101,7 +102,7 @@ export class UserService {
   static async Update(user: User, request: UpdateUserRequest) {
     const updateRequest: UpdateUserRequest = Validation.validate(
       UserValidation.UPDATE,
-      request
+      request,
     );
 
     if (updateRequest.name) {

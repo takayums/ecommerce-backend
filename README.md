@@ -14,3 +14,10 @@
 - User Management
 - Cart
 - Order
+
+## Setup Installation
+
+- Generate Databases with Prisma
+
+
+

@@ -1,6 +1,6 @@
 import express from "express";
-import { UserController } from "@/controller/user-controller";
-import { authMiddleware } from "@/middleware/auth-middleware";
+import { UserController } from "@/controller/user-controller.ts";
+import { authMiddleware } from "@/middleware/auth-middleware.ts";
 
 export const apiRouter = express.Router();
 
