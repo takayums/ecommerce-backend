@@ -4,6 +4,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import compression from "compression";
+import helmet from "helmet";
 
 /*
  * Custom Modules
@@ -18,8 +20,6 @@ import { logger } from "./logging.ts";
  * Types
  */
 import type { CorsOptions } from "cors";
-import helmet from "helmet";
-import compression from "compression";
 
 export const app = express();
 
