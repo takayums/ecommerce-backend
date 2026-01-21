@@ -13,6 +13,7 @@ const config = {
   DATABASES_NAME: process.env.DATABASE_NAME,
   DATABASES_PORT: process.env.DATABASE_PORT,
   DATABASE_HOST: process.env.DATABASE_HOST,
+  WHITELIST_ORIGIN: ["http://localhost:3000", "https://takayums.com"],
 };
 
 export default config;
