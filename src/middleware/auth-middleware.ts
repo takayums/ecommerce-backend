@@ -18,7 +18,7 @@ export const authMiddleware = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const token = req.cookies.token;
+  const token = req.cookies.refreshToken;
   if (token) {
     const user = await prismaClient.user.findFirst({
       where: {

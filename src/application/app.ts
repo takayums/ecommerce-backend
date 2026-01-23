@@ -46,6 +46,9 @@ app.use(cors(corsOpration));
 // Json body
 app.use(express.json());
 
+// X-Form Urlencode
+app.use(express.urlencoded({ extended: true }));
+
 // Access Cookies Browser
 app.use(cookieParser());
 

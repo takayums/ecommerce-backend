@@ -12,16 +12,21 @@ import { User } from "@prisma/generated/prisma/client.ts";
 import { logger } from "@/application/logging.ts";
 import { ResponseError } from "@/error/response-error.ts";
 import { Validation } from "@/validation/validation.ts";
+import { generateAccessToken, generateRefreshToken } from "@/lib/jwt.ts";
 
 /*
  * Types
  */
 import {
-  CreateUserRequest,
-  LoginRequest,
+  DataRegisterRequest,
+  DataLoginRequest,
+  DataUpdateUserRequest,
   responseUser,
-  UpdateUserRequest,
-} from "@/model/user-model.ts";
+} from "@/type/user-type.ts";
+
+/*
+ * Validation
+ */
 import {
   TypeLoginUserRequest,
   TypeRegisterUserRequest,
@@ -30,11 +35,14 @@ import {
 
 export class UserService {
   // Register Service
-  static async RegisterService(request: CreateUserRequest) {
+  static async RegisterService(request: DataRegisterRequest) {
+    // Validation Data Register
     const registerRequest: TypeRegisterUserRequest = Validation.validate(
       UserValidation.REGISTER,
       request,
     );
+
+    // Checking User is Exits
     const existingUser = await prismaClient.user.count({
       where: {
         email: request.email,
@@ -48,8 +56,10 @@ export class UserService {
       throw new ResponseError("User is already", 401);
     }
 
+    // Hashing Password with Bcrypt
     registerRequest.password = await bcrypt.hash(registerRequest.password, 10);
 
+    // Prisma Insert Data in Databases
     const user = await prismaClient.user.create({
       data: registerRequest,
     });
@@ -59,12 +69,14 @@ export class UserService {
   }
 
   // Login Service
-  static async LoginService(request: LoginRequest) {
+  static async LoginService(request: DataLoginRequest) {
+    // Validation Data Login
     const loginRequest: TypeLoginUserRequest = Validation.validate(
       UserValidation.LOGIN,
       request,
     );
-    const jwtSecretKey: string = process.env.SECRETE_KEY as string;
+
+    // Check Exitsting User
     let user = await prismaClient.user.findUnique({
       where: {
         email: loginRequest.email,
@@ -75,6 +87,7 @@ export class UserService {
       throw new ResponseError("User not found", 404);
     }
 
+    // Compare Password
     const passwordMatched = await bcrypt.compare(
       loginRequest.password,
       user!.password,
@@ -84,29 +97,40 @@ export class UserService {
       throw new ResponseError("Email or Password is wrong", 400);
     }
 
-    const token = jwt.sign({ data: user?.email }, jwtSecretKey, {
-      expiresIn: "1h",
+    // Generate Token Access
+    const accessToken: string = await generateAccessToken({
+      id: user?.id,
+      email: user?.email,
     });
 
+    // Generate Refresh Token
+    const refreshToken: string = await generateRefreshToken({
+      id: user?.id,
+      email: user?.email,
+    });
+    logger.info("Refresh Token and Access Token Created Successfully!!");
+
+    // Update Refresh Token in Database
     user = await prismaClient.user.update({
       where: { email: loginRequest.email },
       data: {
-        token: token,
+        token: refreshToken,
       },
     });
 
+    // Return Data
     const data = responseUser(user);
-    data.token = user.token!;
-    return data;
+    return { data, refreshToken, accessToken };
   }
 
   // Get Service
   static async Get(user: User) {
     return responseUser(user);
   }
+
   // Update Service
-  static async Update(user: User, request: UpdateUserRequest) {
-    const updateRequest: UpdateUserRequest = Validation.validate(
+  static async Update(user: User, request: DataUpdateUserRequest) {
+    const updateRequest: DataUpdateUserRequest = Validation.validate(
       UserValidation.UPDATE,
       request,
     );

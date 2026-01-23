@@ -6,7 +6,8 @@ import "dotenv/config";
 const config = {
   PORT: process.env.PORT || 3000,
   NODE_ENV: process.env.NODE_ENV,
-  SECRETE_KEY: process.env.SECRETE_KEY,
+  SECRETE_KEY_ACCESSTOKEN: process.env.SECRETE_KEY_ACCESSTOKEN as string,
+  SECRETE_KEY_REFRESHTOKEN: process.env.SECRETE_KEY_REFRESHTOKEN as string,
   DATABASE_URL: process.env.DATABASE_URL,
   DATABASE_USER: process.env.DATABASE_USER,
   DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,

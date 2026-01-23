@@ -11,20 +11,31 @@ import { UserService } from "@/service/user-service.ts";
 /*
  * Types
  */
-import {
-  CreateUserRequest,
-  LoginRequest,
-  UpdateUserRequest,
-} from "@/model/user-model.ts";
 import { UserRequest } from "@/type/user-request.ts";
+import {
+  DataLoginRequest,
+  DataRegisterRequest,
+  DataUpdateUserRequest,
+  LoginResponse,
+  RegisterResponse,
+} from "@/type/user-type.ts";
 
 export class UserController {
+  // Controller Register
   static async Register(req: Request, res: Response, next: NextFunction) {
     try {
-      const request: CreateUserRequest = req.body as CreateUserRequest;
+      // Data User from req.body
+      const request: DataRegisterRequest = req.body as DataRegisterRequest;
+
+      // Service Register
       const response = await UserService.RegisterService(request);
+
+      // Response Register
+      const reponseRegister: RegisterResponse = { user: response };
+
+      // Response
       res.status(200).json({
-        data: response,
+        data: reponseRegister,
         message: "User Created",
         status: true,
       });
@@ -33,13 +44,30 @@ export class UserController {
     }
   }
 
+  // Controller Login
   static async Login(req: Request, res: Response, next: NextFunction) {
     try {
-      const request: LoginRequest = req.body as LoginRequest;
-      const response = await UserService.LoginService(request);
-      res.cookie("token", response.token, { httpOnly: true });
+      // Data User from req.body
+      const request: DataLoginRequest = req.body as DataLoginRequest;
+
+      // Service Login
+      const { data, refreshToken, accessToken } =
+        await UserService.LoginService(request);
+
+      // Response Login
+      const responseLogin: LoginResponse = {
+        user: data,
+        accessToken: accessToken,
+      };
+
+      // Send Token to Cookie
+      res.cookie("refreshToken", refreshToken, { httpOnly: true });
+
+      // Response
       res.status(200).json({
-        data: response,
+        data: responseLogin,
+        message: "Login User",
+        status: true,
       });
     } catch (error) {
       next(error);
@@ -59,7 +87,7 @@ export class UserController {
 
   static async UpdateUser(req: UserRequest, res: Response, next: NextFunction) {
     try {
-      const request: UpdateUserRequest = req.body as UpdateUserRequest;
+      const request: DataUpdateUserRequest = req.body as DataUpdateUserRequest;
       const response = await UserService.Update(req.user!, request);
       res.status(201).json({
         data: response,
