@@ -8,6 +8,7 @@ export type DataCategoryRequest = {
 };
 
 export type AllCategoryResponse = { categories: Category[] };
+export type DetailCategoryResponse = { category: Category };
 
 export type CategoryResponse = { category: { name: string } };
 

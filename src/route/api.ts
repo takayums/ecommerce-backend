@@ -26,10 +26,9 @@ apiRouter.get("/api/users/current", UserController.GetUsers);
 // Category Route
 apiRouter.post("/api/category", CategoryController.CreateCategory);
 apiRouter.get("/api/category", CategoryController.GetAllCategory);
-apiRouter.get("/api/category/:id");
-apiRouter.get("/api/category/:id");
-apiRouter.patch("/api/category/:id");
-apiRouter.delete("/api/category/:id");
+apiRouter.get("/api/category/:id", CategoryController.GetDetailCategory);
+apiRouter.patch("/api/category/:id", CategoryController.UpdateCategory);
+apiRouter.delete("/api/category/:id", CategoryController.DeleteCategory);
 
 // Product Route
 apiRouter.post("/api/products");
