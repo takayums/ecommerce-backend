@@ -80,6 +80,7 @@ export class CategoryService {
     });
 
     if (!existingCategory) {
+      logger.warn("Category Not Found");
       throw new ResponseError("Category Not Found", 404);
     }
 
@@ -102,11 +103,13 @@ export class CategoryService {
     });
 
     if (!existingCategory) {
+      logger.warn("Category Not Found");
       throw new ResponseError("Category Not Found", 404);
     }
 
     // Delete Category By Id
     const category = await prismaClient.category.delete({ where: { id: id } });
+    logger.info("Delete Category");
 
     return category;
   }
