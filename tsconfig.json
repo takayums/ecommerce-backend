@@ -17,7 +17,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "NodeNext",
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/type"
+    ]
   },
   "include": [
     "src/**/*"

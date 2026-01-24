@@ -11,7 +11,6 @@ import { UserService } from "@/service/user-service.ts";
 /*
  * Types
  */
-import { UserRequest } from "@/type/user-request.ts";
 import {
   DataLoginRequest,
   DataRegisterRequest,
@@ -74,7 +73,7 @@ export class UserController {
     }
   }
 
-  static async GetUsers(req: UserRequest, res: Response, next: NextFunction) {
+  static async GetUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await UserService.Get(req.user!);
       res.status(200).json({
@@ -85,7 +84,7 @@ export class UserController {
     }
   }
 
-  static async UpdateUser(req: UserRequest, res: Response, next: NextFunction) {
+  static async UpdateUser(req: Request, res: Response, next: NextFunction) {
     try {
       const request: DataUpdateUserRequest = req.body as DataUpdateUserRequest;
       const response = await UserService.Update(req.user!, request);
@@ -97,7 +96,7 @@ export class UserController {
     }
   }
 
-  static async Logout(req: UserRequest, res: Response, next: NextFunction) {
+  static async Logout(req: Request, res: Response, next: NextFunction) {
     try {
       await UserService.Logout(req.user!);
       res.status(200).json({

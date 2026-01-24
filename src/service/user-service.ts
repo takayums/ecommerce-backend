@@ -101,12 +101,14 @@ export class UserService {
     const accessToken: string = await generateAccessToken({
       id: user?.id,
       email: user?.email,
+      role: user?.role,
     });
 
     // Generate Refresh Token
     const refreshToken: string = await generateRefreshToken({
       id: user?.id,
       email: user?.email,
+      role: user?.role,
     });
     logger.info("Refresh Token and Access Token Created Successfully!!");
 
@@ -153,7 +155,6 @@ export class UserService {
   }
 
   // Logout Service
-
   static async Logout(user: User) {
     const result = await prismaClient.user.update({
       where: {

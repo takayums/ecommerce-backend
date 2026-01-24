@@ -12,11 +12,11 @@ import { CategoryController } from "@/controller/category-controller.ts";
 /*
  * Middleware
  * */
-import { authMiddleware } from "@/middleware/auth-middleware.ts";
+import { authanticate } from "@/middleware/auth-middleware.ts";
 
 export const apiRouter = express.Router();
 
-apiRouter.use(authMiddleware);
+apiRouter.use(authanticate);
 
 // User Route
 apiRouter.delete("/api/users/current", UserController.Logout);
