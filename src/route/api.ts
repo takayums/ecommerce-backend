@@ -12,7 +12,7 @@ import { CategoryController } from "@/controller/category-controller.ts";
 /*
  * Middleware
  * */
-import { authanticate } from "@/middleware/auth-middleware.ts";
+import { authanticate, authorize } from "@/middleware/auth-middleware.ts";
 
 export const apiRouter = express.Router();
 
@@ -24,11 +24,23 @@ apiRouter.patch("/api/users/current", UserController.UpdateUser);
 apiRouter.get("/api/users/current", UserController.GetUsers);
 
 // Category Route
-apiRouter.post("/api/category", CategoryController.CreateCategory);
+apiRouter.post(
+  "/api/category",
+  authorize(["ADMIN"]),
+  CategoryController.CreateCategory,
+);
 apiRouter.get("/api/category", CategoryController.GetAllCategory);
 apiRouter.get("/api/category/:id", CategoryController.GetDetailCategory);
-apiRouter.patch("/api/category/:id", CategoryController.UpdateCategory);
-apiRouter.delete("/api/category/:id", CategoryController.DeleteCategory);
+apiRouter.patch(
+  "/api/category/:id",
+  authorize(["ADMIN"]),
+  CategoryController.UpdateCategory,
+);
+apiRouter.delete(
+  "/api/category/:id",
+  authorize(["ADMIN"]),
+  CategoryController.DeleteCategory,
+);
 
 // Product Route
 apiRouter.post("/api/products");
