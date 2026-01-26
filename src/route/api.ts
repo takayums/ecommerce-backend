@@ -12,11 +12,12 @@ import { CategoryController } from "@/controller/category-controller.ts";
 /*
  * Middleware
  * */
-import { authanticate, authorize } from "@/middleware/auth-middleware.ts";
+import { authenticate, authorize } from "@/middleware/auth-middleware.ts";
+import { ProductController } from "@/controller/product-controller.ts";
 
 export const apiRouter = express.Router();
 
-apiRouter.use(authanticate);
+apiRouter.use(authenticate);
 
 // User Route
 apiRouter.delete("/api/users/current", UserController.Logout);
@@ -43,7 +44,11 @@ apiRouter.delete(
 );
 
 // Product Route
-apiRouter.post("/api/products");
+apiRouter.post(
+  "/api/products",
+  authorize(["ADMIN"]),
+  ProductController.CreateProduct,
+);
 apiRouter.get("/api/products");
 apiRouter.patch("/api/products");
 apiRouter.delete("/api/products");

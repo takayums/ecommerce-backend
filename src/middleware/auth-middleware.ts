@@ -18,7 +18,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 const { JsonWebTokenError, TokenExpiredError } = jwt;
 
 // Authenticate User
-export const authanticate = async (
+export const authenticate = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -33,9 +33,8 @@ export const authanticate = async (
 
   // Unauthorize
   if (!accessToken) {
-    res.status(401).json({ errors: "Unauthorized" });
     logger.warn("Unauthorized");
-    return;
+    return next(new ResponseError("Unauthorized", 401));
   }
 
   try {
@@ -44,16 +43,6 @@ export const authanticate = async (
     req.user = decode?.data;
     return next();
   } catch (error) {
-    // Token Expired
-    if (error instanceof TokenExpiredError) {
-      logger.warn("Token is expired");
-      throw new ResponseError("Token is expired", 401);
-    }
-    // Token Invalid
-    if (error instanceof JsonWebTokenError) {
-      logger.warn("Access Token Invalid");
-      throw new ResponseError("Access Token Invalid", 401);
-    }
     next(error);
   }
 };
@@ -72,13 +61,15 @@ export const authorize = (roles: AuthRole[]) => {
       // User Not Found
       if (!user) {
         logger.warn("Not Found User");
-        throw new ResponseError("Not Found User", 404);
+        return next(new ResponseError("Not Found User", 404));
       }
 
       // Check Role User
       if (!roles.includes(user.role)) {
         logger.warn("Authorization Error, User Denided");
-        throw new ResponseError("Authorization Error, User Denided", 403);
+        return next(
+          new ResponseError("Authorization Error, User Denided", 403),
+        );
       }
       return next();
     } catch (error) {
