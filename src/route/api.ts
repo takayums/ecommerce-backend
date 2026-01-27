@@ -2,6 +2,7 @@
  * Node Modules
  */
 import express from "express";
+import multer from "multer";
 
 /*
  * Custom Modules
@@ -14,9 +15,14 @@ import { CategoryController } from "@/controller/category-controller.ts";
  * */
 import { authenticate, authorize } from "@/middleware/auth-middleware.ts";
 import { ProductController } from "@/controller/product-controller.ts";
+import { uploadMiddleware } from "@/middleware/upload-middleware.ts";
 
 export const apiRouter = express.Router();
 
+// Middleware Upload with Multer
+const upload = multer();
+
+// Middleware authanticate
 apiRouter.use(authenticate);
 
 // User Route
@@ -47,6 +53,8 @@ apiRouter.delete(
 apiRouter.post(
   "/api/products",
   authorize(["ADMIN"]),
+  upload.single("thumbnail"),
+  uploadMiddleware("post"),
   ProductController.CreateProduct,
 );
 apiRouter.get("/api/products");

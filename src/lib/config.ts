@@ -11,10 +11,14 @@ const config = {
   DATABASE_URL: process.env.DATABASE_URL,
   DATABASE_USER: process.env.DATABASE_USER,
   DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
-  DATABASES_NAME: process.env.DATABASE_NAME,
-  DATABASES_PORT: process.env.DATABASE_PORT,
+  DATABASE_NAME: process.env.DATABASE_NAME,
+  DATABASE_PORT: process.env.DATABASE_PORT,
   DATABASE_HOST: process.env.DATABASE_HOST,
   WHITELIST_ORIGIN: ["http://localhost:3000", "https://takayums.com"],
+  CLOUDINARY_URL: process.env.CLOUDINARY_URL,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_SECRET: process.env.CLOUDINARY_SECRET,
+  CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
 };
 
 export default config;

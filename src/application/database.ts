@@ -14,7 +14,7 @@ const adapter = new PrismaMariaDb({
   host: config.DATABASE_HOST,
   user: config.DATABASE_USER,
   password: config.DATABASE_PASSWORD,
-  database: config.DATABASES_NAME,
+  database: config.DATABASE_NAME,
   connectionLimit: 5,
 });
 

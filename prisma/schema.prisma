@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output = "./generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
@@ -48,7 +48,8 @@ model Product {
   description String      @db.VarChar(100)
   price       Decimal
   stock       Int
-  images      Json
+  thumbnail   Json
+  gallery     Json?
   size        String
   quantity    Int
   createAt    DateTime    @default(now())
