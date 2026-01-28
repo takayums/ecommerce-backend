@@ -67,6 +67,15 @@ apiRouter.get(
   authorize(["ADMIN"]),
   ProductController.GetDetailProduct,
 );
-
-apiRouter.patch("/api/products");
-apiRouter.delete("/api/products");
+apiRouter.patch(
+  "/api/products/:id",
+  authorize(["ADMIN"]),
+  upload.single("thumbnail"),
+  uploadMiddleware("patch"),
+  ProductController.UpdateProduct,
+);
+apiRouter.delete(
+  "/api/products/:id",
+  authorize(["ADMIN"]),
+  ProductController.DeleteProduct,
+);

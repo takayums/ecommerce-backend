@@ -8,7 +8,10 @@ import { logger } from "@/application/logging.ts";
  * Types
  * */
 import { Response, Request, NextFunction } from "express";
-import { DataProductRequest } from "@/type/product-type.ts";
+import {
+  DataProductRequest,
+  DataUpdateProductRequest,
+} from "@/type/product-type.ts";
 
 export class ProductController {
   // Create Product
@@ -85,13 +88,58 @@ export class ProductController {
         message: "Get Detail Product",
       });
     } catch (error) {
+      logger.warn("Get Detail Products Failed");
       next(error);
     }
   }
 
   // Update Product
-  static async UpdateProduct() {}
+  static async UpdateProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Req.Body For Update Data
+      const request = req.body as DataUpdateProductRequest;
+      const id = req.params.id;
+      // Service Update Product
+      const product = await ProductService.UpdateProduct(Number(id), request);
+
+      // Logger
+      logger.info("Product Updated");
+
+      // Reeponse
+      const data = { product: product };
+      res.status(200).json({
+        data: data,
+        status: true,
+        message: "Product Updated",
+      });
+    } catch (error) {
+      logger.warn("Update Products Failed");
+      next(error);
+    }
+  }
 
   // Delete Product
-  static async DeleteProduct() {}
+  static async DeleteProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Req.Params Id
+      const id = req.params.id;
+
+      // Service Delete Product
+      const product = await ProductService.DeleteProduct(Number(id));
+
+      // Logger
+      logger.info("Product Deleted");
+
+      // Response
+      const data = { product: product };
+      res.status(200).json({
+        data: data,
+        status: true,
+        message: "Product Deleted",
+      });
+    } catch (error) {
+      logger.warn("Deleted Product Failed");
+      next(error);
+    }
+  }
 }

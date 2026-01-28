@@ -4,6 +4,7 @@
 import { prismaClient } from "@/application/database.ts";
 import { Validation } from "@/validation/validation.ts";
 import { logger } from "@/application/logging.ts";
+import { ResponseError } from "@/error/response-error.ts";
 
 /*
  * Types
@@ -11,9 +12,13 @@ import { logger } from "@/application/logging.ts";
 import {
   ProductValidation,
   TypeCreateProduct,
+  TypeUpdateProduct,
 } from "@/validation/product-validation.ts";
-import { DataProductRequest, responseProduct } from "@/type/product-type.ts";
-import { ResponseError } from "@/error/response-error.ts";
+import {
+  DataProductRequest,
+  DataUpdateProductRequest,
+  responseProduct,
+} from "@/type/product-type.ts";
 
 export class ProductService {
   // Create Product
@@ -62,8 +67,51 @@ export class ProductService {
   }
 
   // Update Product
-  static async UpdateProduct() {}
+  static async UpdateProduct(id: number, request: DataUpdateProductRequest) {
+    // Validation Data Request
+    const productRequest: TypeUpdateProduct = Validation.validate(
+      ProductValidation.UPDATEPRODUCT,
+      request,
+    );
+
+    // Check Product Existing
+    const existingProduct = await prismaClient.product.findUnique({
+      where: { id },
+    });
+
+    if (!existingProduct) {
+      logger.warn("Product Not Found");
+      throw new ResponseError("Product Not Found", 404);
+    }
+
+    // Update Data in Databases
+    const product = await prismaClient.product.update({
+      data: productRequest,
+      where: { id },
+    });
+
+    // Return Response
+    const data = product;
+    return data;
+  }
 
   // Delete Product
-  static async DeleteProduct() {}
+  static async DeleteProduct(id: number) {
+    // Check Product Existing
+    const existingProduct = await prismaClient.product.findUnique({
+      where: { id },
+    });
+
+    if (!existingProduct) {
+      logger.warn("Product Not Found");
+      throw new ResponseError("Product Not Found", 404);
+    }
+
+    // Delete Data In Databases
+    const product = await prismaClient.product.delete({ where: { id } });
+
+    // Return Response
+    const data = product;
+    return data;
+  }
 }
