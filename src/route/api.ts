@@ -57,6 +57,16 @@ apiRouter.post(
   uploadMiddleware("post"),
   ProductController.CreateProduct,
 );
-apiRouter.get("/api/products");
+apiRouter.get(
+  "/api/products",
+  authorize(["ADMIN"]),
+  ProductController.GetAllProducts,
+);
+apiRouter.get(
+  "/api/products/:id",
+  authorize(["ADMIN"]),
+  ProductController.GetDetailProduct,
+);
+
 apiRouter.patch("/api/products");
 apiRouter.delete("/api/products");
